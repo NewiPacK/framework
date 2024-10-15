@@ -10,18 +10,8 @@ require_once __DIR__ . '/../config/config.php';
 require_once ROOT . '/vendor/autoload.php';
 require_once HELPERS . '/helpers.php';
 
-
 $app = new \PHPFramework\Application();
 require_once CONFIG . '/routes.php';
 $app->run();
-//dump($app);
-//dump(app());
-//dump(request()->getMethod());
-//dump(request()->isGet());
-//dump(request()->isPost());
-//dump(request()->isAjax());
-//dump(request()->get('page'));
 
-
-
-dump("Time:" .microtime(true) - $start_framework);
+//dump("Time:" .microtime(true) - $start_framework);
