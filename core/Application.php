@@ -9,6 +9,7 @@ class Application
     public Response $response;
     public Router $router;
     public View $view;
+    public Session $session;
     public static Application $app;
 
     public function __construct()
@@ -19,6 +20,7 @@ class Application
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);
         $this->view = new View(LAYOUT);
+        $this->session = new Session();
     }
 
     public function run(): void
