@@ -4,24 +4,24 @@ namespace PHPFramework;
 
 class Router
 {
-    protected Request $request;
-    protected Response $response;
+//    protected Request $request;
+//    protected Response $response;
     protected array $routes = [];
     protected array $route_params = [];
 
-    public function __construct(Request $request, Response $response)
-    {
-        $this->request = $request;
-        $this->response = $response;
-    }
-
-    //    public function __construct(
-//        protected Request $request,
-//        protected Response $response
-//    )
+//    public function __construct(Request $request, Response $response)
 //    {
-//
+//        $this->request = $request;
+//        $this->response = $response;
 //    }
+
+        public function __construct(
+        protected Request $request,
+        protected Response $response
+    )
+    {
+
+    }
 
     public function add($path, $callback, $method):  self
     {
@@ -60,16 +60,14 @@ class Router
     public function dispatch(): mixed
     {
         $path = $this->request->getPath();
-
-        $path = $this->request->getPath();
         $route = $this->matchRoute($path);
         if (false === $route) {
-            $this->response->setResponseCode(404);
             abort('Test 404 error');
             die;
         }
+
         if (is_array($route['callback'])) {
-            $route['callback']['0'] = new $route['callback'][0];
+            $route['callback'][0] = new $route['callback'][0];
         }
         return call_user_func($route['callback']);
     }

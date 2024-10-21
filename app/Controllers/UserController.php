@@ -3,13 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class UserController extends BaseController
 {
     public function register()
     {
         return view('user/register', [
-            'title' => 'Register page'
+            'title' => 'Register page',
         ]);
     }
 
@@ -22,14 +23,14 @@ class UserController extends BaseController
             session()->set('form_errors', $model->getErrors());
             session()->set('form_data', $model->attributes);
         } else {
+            if ($model->save())  {
+                session()->setFlash('success', 'Thanks for registration');
+            } else {
+                session()->setFlash('error', 'Error registration');
+            };
 //            session()->setFlash('info', 'Info message...');
-            session()->setFlash('success', 'Successfully Validation');
         }
         response()->redirect('/register');
-//        dump($model->attributes);
-//        dump($model->validate());
-//        dump($model->getErrors());
-//        dd($_POST);
     }
 
     public function login()
