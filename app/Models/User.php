@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use PHPFramework\Model;
 
 class User extends Model
@@ -29,4 +30,9 @@ class User extends Model
         'confirmPassword' => 'Подтверждение пароля',
 
     ];
+
+    public function phones(): HasMany
+    {
+        return $this->hasMany(Phone::class);
+    }
 }
