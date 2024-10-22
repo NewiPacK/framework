@@ -3,45 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class UserController extends BaseController
 {
     public function register()
     {
-//        Capsule::enableQueryLog();
-//        $user = User::query()->with('phones')->find(5);
-//        dump($user);
-//        dump($user->phones);
-//
-//        dump(Capsule::getQueryLog());
-
-//        $users = db()->query('select * from users where id > ?', [5])->get();
-//        dump($users);
-//
-//        $users = db()->query('select * from users where id > ?', [5])->getAssoc('email');
-//        dump($users);
-
-//        $users = db()->query('select * from users where id = ?', [5])->getOne();
-//        dump($users);
-
-//        dump(db()->query('select count(*) from users')->getColumn());
-
-//        $users = db()->findAll('users');
-//        dump($users);
-
-//        $user = db()->findOne('users', 5);
-//        dump($user);
-
-//        $user = db()->findOrFail('users', 5);
-//        dump($user);
-
-//        db()->query('insert into phones (user_id, phone) values (?, ?)', [5, 8111]);
-//        dump(db()->getInsertId());
-
-//        db()->query('delete from phones where id > ?', [9]);
-//        dump(db()->rowCount());
-
 //        try {
 //            db()->beginTransaction();
 //            db()->query('insert into phones (user_id, phone) values(?,?)', [21, 19111]);
@@ -51,8 +17,6 @@ class UserController extends BaseController
 //            db()->rollBack();
 //            dump($e);
 //        }
-
-
 
         return view('user/register', [
             'title' => 'Register page',
@@ -68,12 +32,13 @@ class UserController extends BaseController
             session()->set('form_errors', $model->getErrors());
             session()->set('form_data', $model->attributes);
         } else {
-            if ($model->save())  {
-                session()->setFlash('success', 'Thanks for registration');
+            $model->attributes['password'] = password_hash
+            ($model->attributes['password'], PASSWORD_DEFAULT);
+            if ($id = $model->save())  {
+                session()->setFlash('success', 'Thanks for registration. Your ID: ' . $id);
             } else {
                 session()->setFlash('error', 'Error registration');
             };
-//            session()->setFlash('info', 'Info message...');
         }
         response()->redirect('/register');
     }
