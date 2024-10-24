@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use PHPFramework\Pagination;
 
 class UserController extends BaseController
 {
@@ -47,6 +48,20 @@ class UserController extends BaseController
     {
         return view('user/login', [
             'title' => 'Login page'
+        ]);
+    }
+
+    public function index()
+    {
+        $users_cnt = db()->query("select count(*) from users")->getColumn();
+        $limit = PAGINATION_SETTINGS['perPage'];
+        $pagination = new Pagination($users_cnt);
+
+        $users = db()->query("select * from users limit $limit offset {$pagination->getOffset()}")->get();
+        return view('user/index', [
+            'title' => 'Users',
+            'users' => $users,
+            'pagination' => $pagination,
         ]);
     }
 }

@@ -4,18 +4,10 @@ namespace PHPFramework;
 
 class Router
 {
-//    protected Request $request;
-//    protected Response $response;
     protected array $routes = [];
     protected array $route_params = [];
 
-//    public function __construct(Request $request, Response $response)
-//    {
-//        $this->request = $request;
-//        $this->response = $response;
-//    }
-
-        public function __construct(
+    public function __construct(
         protected Request $request,
         protected Response $response
     )
@@ -35,7 +27,7 @@ class Router
         $this->routes[] = [
             'path' => "/$path",
             'callback' => $callback,
-            'middleware' => null,
+            'middleware' => [],
             'method' => $method,
             'needCsrfToken' => true,
         ];
@@ -89,9 +81,16 @@ class Router
                             ]);
                             die;
                         } else {
-//                            session()->setFlash('error', 'Ошибка безопасности');
-//                            response()->redirect();
                             abort('Page expired', 419);
+                        }
+                    }
+                }
+
+                if ($route['middleware'])  {
+                    foreach ($route['middleware'] as $item) {
+                        $middleware = MIDDLEWARE[$item] ?? false;
+                        if ($middleware) {
+                            (new $middleware)->handle();
                         }
                     }
                 }
@@ -117,6 +116,12 @@ class Router
     {
         return request()->post('csrf_token') && (request()->post('csrf_token') == session()->
                 get('csrf_token'));
+    }
+
+    public function middleware(array $middleware): self
+    {
+        $this->routes[array_key_last($this->routes)]['middleware'] = $middleware;
+        return $this;
     }
 
 }
